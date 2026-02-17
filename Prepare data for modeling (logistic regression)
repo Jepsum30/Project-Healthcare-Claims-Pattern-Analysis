@@ -1,0 +1,45 @@
+# 5.1 Select features
+feature_cols_num = [
+    "billedamount",
+    "allowedamount",
+    "paidamount",
+    "billed_to_allowed_ratio",
+    "paid_to_allowed_ratio",
+    "billed_minus_paid"
+]
+
+feature_cols_cat = [
+    "insurancetype",
+    "claimstatus",
+    "arstatus"
+]
+
+X = df[feature_cols_num + feature_cols_cat]
+y = df["escalated"]
+
+# 5.2 Train/test split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.25, random_state=42, stratify=y
+)
+
+# 5.3 Preprocessing + model pipeline
+numeric_transformer = "passthrough"
+
+categorical_transformer = OneHotEncoder(handle_unknown="ignore")
+
+preprocessor = ColumnTransformer(
+    transformers=[
+        ("num", numeric_transformer, feature_cols_num),
+        ("cat", categorical_transformer, feature_cols_cat)
+    ]
+)
+
+log_reg = LogisticRegression(max_iter=1000, class_weight="balanced")
+
+clf = Pipeline(steps=[
+    ("preprocessor", preprocessor),
+    ("model", log_reg)
+])
+
+# 5.4 Train model
+clf.fit(X_train, y_train)
