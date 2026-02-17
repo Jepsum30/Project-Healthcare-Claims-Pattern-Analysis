@@ -1,0 +1,40 @@
+# 4.1 Distribution of claim outcomes and statuses
+if "outcome" in df.columns:
+    print(df["outcome"].value_counts())
+    plt.figure(figsize=(6,4))
+    df["outcome"].value_counts().plot(kind="bar")
+    plt.title("Distribution of Claim Outcomes")
+    plt.xlabel("Outcome")
+    plt.ylabel("Count")
+    plt.tight_layout()
+    plt.show()
+
+print(df["claimstatus"].value_counts())
+
+plt.figure(figsize=(6,4))
+df["claimstatus"].value_counts().plot(kind="bar", color="steelblue")
+plt.title("Claim Status Distribution")
+plt.xlabel("Status")
+plt.ylabel("Count")
+plt.tight_layout()
+plt.show()
+
+# 4.2 Basic stats on amounts
+print(df[["billedamount", "allowedamount", "paidamount"]].describe())
+
+# 4.3 Correlation matrix
+plt.figure(figsize=(8,6))
+corr = df[["billedamount", "allowedamount", "paidamount",
+           "billed_to_allowed_ratio", "paid_to_allowed_ratio",
+           "billed_minus_paid", "escalated"]].corr()
+sns.heatmap(corr, annot=True, cmap="coolwarm", fmt=".2f")
+plt.title("Correlation Heatmap")
+plt.tight_layout()
+plt.show()
+
+# 4.4 Simple fraud indicator exploration
+fraud_proxy_cols = ["high_billed_to_allowed", "high_billed_minus_paid"]
+for col in fraud_proxy_cols:
+    rate = df.groupby(col)["escalated"].mean()
+    print(f"\nEscalation rate by {col}:")
+    print(rate)
