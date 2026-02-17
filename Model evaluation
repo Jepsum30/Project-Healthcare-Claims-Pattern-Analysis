@@ -1,0 +1,19 @@
+# 6.1 Predictions
+y_pred = clf.predict(X_test)
+y_proba = clf.predict_proba(X_test)[:, 1]
+
+# 6.2 Metrics
+print("Classification report:")
+print(classification_report(y_test, y_pred))
+
+print("Confusion matrix:")
+print(confusion_matrix(y_test, y_pred))
+
+roc_auc = roc_auc_score(y_test, y_proba)
+print("ROC-AUC:", roc_auc)
+
+# 6.3 ROC curve
+RocCurveDisplay.from_predictions(y_test, y_proba)
+plt.title("ROC Curve - Escalation Prediction")
+plt.tight_layout()
+plt.show()
