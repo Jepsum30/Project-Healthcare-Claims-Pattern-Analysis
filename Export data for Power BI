@@ -1,0 +1,28 @@
+export_cols = [
+    "claimid",
+    "providerid",
+    "patientid",
+    "dateofservice",
+    "billedamount",
+    "allowedamount",
+    "paidamount",
+    "insurancetype",
+    "claimstatus",
+    "reasoncode",
+    "followuprequired",
+    "arstatus",
+    "outcome",
+    "billed_to_allowed_ratio",
+    "paid_to_allowed_ratio",
+    "billed_minus_paid",
+    "high_billed_to_allowed",
+    "high_billed_minus_paid",
+    "escalated"
+]
+
+# Some columns may not exist depending on the exact file; keep only those present
+export_cols = [c for c in export_cols if c in df.columns]
+
+df_export = df[export_cols].copy()
+df_export.to_csv("claims_for_powerbi.csv", index=False)
+print("Exported cleaned data to claims_for_powerbi.csv")
