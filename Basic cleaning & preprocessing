@@ -1,0 +1,31 @@
+# Standardize column names
+df.columns = df.columns.str.strip().str.lower()
+
+# Expected columns from the GitHub dataset:
+# claimid, providerid, patientid, dateofservice, billedamount, procedurecode,
+# diagnosiscode, allowedamount, paidamount, insurancetype, claimstatus,
+# reasoncode, followuprequired, arstatus, outcome
+
+# Convert dates
+df["dateofservice"] = pd.to_datetime(df["dateofservice"], errors="coerce")
+
+# Numeric conversions
+num_cols = ["billedamount", "allowedamount", "paidamount", "procedurecode"]
+for col in num_cols:
+    df[col] = pd.to_numeric(df[col], errors="coerce")
+
+# Basic missing value check
+print(df.isna().sum())
+
+# Simple missing handling
+# Drop rows with missing key numeric fields
+df = df.dropna(subset=["billedamount", "allowedamount", "paidamount"])
+
+# Fill missing categorical with "Unknown"
+cat_cols = ["insurancetype", "claimstatus", "reasoncode",
+            "followuprequired", "arstatus", "outcome", "diagnosiscode"]
+for col in cat_cols:
+    if col in df.columns:
+        df[col] = df[col].fillna("Unknown")
+
+print("After cleaning shape:", df.shape)
