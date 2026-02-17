@@ -1,0 +1,16 @@
+# 3.1 Monetary ratios and differences
+df["billed_to_allowed_ratio"] = df["billedamount"] / (df["allowedamount"] + 1e-6)
+df["paid_to_allowed_ratio"] = df["paidamount"] / (df["allowedamount"] + 1e-6)
+df["billed_minus_paid"] = df["billedamount"] - df["paidamount"]
+
+# 3.2 Simple fraud indicator proxy (for analysis, not label)
+# High billed_to_allowed_ratio or large billed_minus_paid
+df["high_billed_to_allowed"] = (df["billed_to_allowed_ratio"] > df["billed_to_allowed_ratio"].quantile(0.95)).astype(int)
+df["high_billed_minus_paid"] = (df["billed_minus_paid"] > df["billed_minus_paid"].quantile(0.95)).astype(int)
+
+# 3.3 Escalation label (target for logistic regression)
+# Here we define "escalation" as follow-up required = 'Yes' (or similar)
+df["followuprequired"] = df["followuprequired"].str.strip().str.lower()
+df["escalated"] = df["followuprequired"].isin(["yes", "y", "true", "1"]).astype(int)
+
+print(df["escalated"].value_counts())
