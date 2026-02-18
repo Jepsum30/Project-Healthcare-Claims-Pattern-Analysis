@@ -1,0 +1,87 @@
+First 5 rows of dataset:
+     Claim_ID  Provider_ID  Patient_ID Date_of_Service  Billed_Amount  \
+0  0HO1FSN4AP    126528997  7936697103      2024-08-07            304   
+1  9U86CI2P5A   6986719948  1547160031      2024-06-21            348   
+2  1QEU1AIDAU   1355108115  2611585318      2024-07-04            235   
+3  WH7XDS8CEO   9991055906  7167948632      2024-05-26            112   
+4  M6OJEZ8KGI   7382167012  2140226267      2024-07-16            406   
+
+   Procedure_Code Diagnosis_Code  Allowed_Amount  Paid_Amount Insurance_Type  \
+0           99231          A02.1             218          203       Self-Pay   
+1           99213          A16.5             216          206       Medicare   
+2           99213          A00.1             148          119     Commercial   
+3           99215          A18.6              79           69       Medicare   
+4           99238          A17.9             320          259       Medicare   
+
+   Claim_Status                    Reason_Code Follow-up_Required  \
+0          Paid  Incorrect billing information                Yes   
+1          Paid         Pre-existing condition                Yes   
+2  Under Review                Duplicate claim                 No   
+3        Denied     Authorization not obtained                 No   
+4        Denied     Authorization not obtained                 No   
+
+        AR_Status         Outcome  
+0         Pending  Partially Paid  
+1            Open          Denied  
+2          Denied          Denied  
+3  Partially Paid          Denied  
+4         On Hold          Denied  
+
+Dataset Information:
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 1000 entries, 0 to 999
+Data columns (total 15 columns):
+ #   Column              Non-Null Count  Dtype         
+---  ------              --------------  -----         
+ 0   Claim_ID            1000 non-null   object        
+ 1   Provider_ID         1000 non-null   int64         
+ 2   Patient_ID          1000 non-null   int64         
+ 3   Date_of_Service     1000 non-null   datetime64[ns]
+ 4   Billed_Amount       1000 non-null   int64         
+ 5   Procedure_Code      1000 non-null   int64         
+ 6   Diagnosis_Code      1000 non-null   object        
+ 7   Allowed_Amount      1000 non-null   int64         
+ 8   Paid_Amount         1000 non-null   int64         
+ 9   Insurance_Type      1000 non-null   object        
+ 10  Claim_Status        1000 non-null   object        
+ 11  Reason_Code         1000 non-null   object        
+ 12  Follow-up_Required  1000 non-null   object        
+ 13  AR_Status           1000 non-null   object        
+ 14  Outcome             1000 non-null   object        
+dtypes: datetime64[ns](1), int64(6), object(8)
+memory usage: 117.3+ KB
+None
+
+Column Names:
+['Claim_ID', 'Provider_ID', 'Patient_ID', 'Date_of_Service', 'Billed_Amount', 'Procedure_Code', 'Diagnosis_Code', 'Allowed_Amount', 'Paid_Amount', 'Insurance_Type', 'Claim_Status', 'Reason_Code', 'Follow-up_Required', 'AR_Status', 'Outcome']
+
+Data cleaned successfully.
+
+Total Claims: 1000
+Average Billed Amount: 297.19
+Highest Billed Amount: 500
+
+Claims by Status:
+Claim_Status
+Under Review    338
+Paid            334
+Denied          328
+Name: count, dtype: int64
+
+Top 5 Providers by Number of Claims:
+Provider_ID
+126528997     1
+5834352921    1
+2292006926    1
+2245195950    1
+6684688437    1
+Name: count, dtype: int64
+
+Number of High-Cost Claims: 48
+C:\Users\17576\AppData\Local\Temp\ipykernel_36960\2865502052.py:36: FutureWarning: DataFrame.fillna with 'method' is deprecated and will raise in a future version. Use obj.ffill() or obj.bfill() instead.
+  df.fillna(method="ffill", inplace=True)
+
+
+
+
+Processed data saved as processed_claims_data.csv
