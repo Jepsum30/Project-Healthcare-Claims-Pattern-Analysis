@@ -1,28 +1,27 @@
-# healthcare_claims_analysis.py
-
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import OneHotEncoder
-from sklearn.compose import ColumnTransformer
-from sklearn.pipeline import Pipeline
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import (
-    classification_report,
-    confusion_matrix,
-    roc_auc_score,
-    RocCurveDisplay
-)
-
-plt.style.use("seaborn-v0_8")
-
-# 1. Load data
-file_path = "claims_data.xlsx"  # from GitHub repo
+# -----------------------------
+# Load Dataset from GitHub
+# -----------------------------
+file_path = "https://raw.githubusercontent.com/shivaprasad1808/Healthcare_claims_dataset/main/claims_data.xlsx"
 df = pd.read_excel(file_path)
 
-print("Shape:", df.shape)
+# -----------------------------
+# Clean Column Names
+# -----------------------------
+# Remove spaces and replace with underscores
+df.columns = df.columns.str.strip().str.replace(" ", "_")
+
+# -----------------------------
+# Initial Data Inspection
+# -----------------------------
+print("First 5 rows of dataset:")
 print(df.head())
+
+print("\nDataset Information:")
 print(df.info())
+
+print("\nColumn Names:")
+print(df.columns.tolist())
