@@ -1,27 +1,13 @@
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
+# -----------------------------
+# Data Cleaning
+# -----------------------------
+# Remove duplicate rows
+df.drop_duplicates(inplace=True)
 
-# -----------------------------
-# Load Dataset from GitHub
-# -----------------------------
-file_path = "https://raw.githubusercontent.com/shivaprasad1808/Healthcare_claims_dataset/main/claims_data.xlsx"
-df = pd.read_excel(file_path)
+# Fill missing values
+df.fillna(method="ffill", inplace=True)
 
-# -----------------------------
-# Clean Column Names
-# -----------------------------
-# Remove spaces and replace with underscores
-df.columns = df.columns.str.strip().str.replace(" ", "_")
+# Convert Date_of_Service to datetime
+df["Date_of_Service"] = pd.to_datetime(df["Date_of_Service"])
 
-# -----------------------------
-# Initial Data Inspection
-# -----------------------------
-print("First 5 rows of dataset:")
-print(df.head())
-
-print("\nDataset Information:")
-print(df.info())
-
-print("\nColumn Names:")
-print(df.columns.tolist())
+print("\nData cleaned successfully.")
