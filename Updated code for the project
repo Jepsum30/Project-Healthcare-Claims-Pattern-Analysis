@@ -1,0 +1,109 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# -----------------------------
+# Load Dataset from GitHub
+# -----------------------------
+file_path = "https://raw.githubusercontent.com/shivaprasad1808/Healthcare_claims_dataset/main/claims_data.xlsx"
+df = pd.read_excel(file_path)
+
+# -----------------------------
+# Clean Column Names
+# -----------------------------
+# Remove spaces and replace with underscores
+df.columns = df.columns.str.strip().str.replace(" ", "_")
+
+# -----------------------------
+# Initial Data Inspection
+# -----------------------------
+print("First 5 rows of dataset:")
+print(df.head())
+
+print("\nDataset Information:")
+print(df.info())
+
+print("\nColumn Names:")
+print(df.columns.tolist())
+
+# -----------------------------
+# Data Cleaning
+# -----------------------------
+# Remove duplicate rows
+df.drop_duplicates(inplace=True)
+
+# Fill missing values
+df.fillna(method="ffill", inplace=True)
+
+# Convert Date_of_Service to datetime
+df["Date_of_Service"] = pd.to_datetime(df["Date_of_Service"])
+
+print("\nData cleaned successfully.")
+
+# -----------------------------
+# Basic Pattern Analysis
+# -----------------------------
+
+# Total number of claims
+total_claims = len(df)
+print("\nTotal Claims:", total_claims)
+
+# Average billed amount
+avg_billed = df["Billed_Amount"].mean()
+print("Average Billed Amount:", round(avg_billed, 2))
+
+# Maximum billed amount
+max_billed = df["Billed_Amount"].max()
+print("Highest Billed Amount:", max_billed)
+
+# Claims by Claim_Status
+print("\nClaims by Status:")
+print(df["Claim_Status"].value_counts())
+
+# -----------------------------
+# Provider Analysis
+# -----------------------------
+top_providers = df["Provider_ID"].value_counts().head(5)
+print("\nTop 5 Providers by Number of Claims:")
+print(top_providers)
+
+# -----------------------------
+# High-Cost Claims Detection
+# -----------------------------
+high_cost_threshold = df["Billed_Amount"].quantile(0.95)
+high_cost_claims = df[df["Billed_Amount"] > high_cost_threshold]
+print("\nNumber of High-Cost Claims:", len(high_cost_claims))
+
+# -----------------------------
+# Visualization Section
+# -----------------------------
+
+# Billed Amount Distribution
+plt.figure(figsize=(8,5))
+sns.histplot(df["Billed_Amount"], bins=30, kde=True, color="skyblue")
+plt.title("Distribution of Billed Amounts")
+plt.xlabel("Billed Amount")
+plt.ylabel("Frequency")
+plt.show()
+
+# Claims by Status Bar Chart
+plt.figure(figsize=(6,4))
+df["Claim_Status"].value_counts().plot(kind="bar", color="orange")
+plt.title("Claims by Status")
+plt.xlabel("Claim Status")
+plt.ylabel("Number of Claims")
+plt.show()
+
+# Top Providers Chart
+plt.figure(figsize=(6,4))
+df["Provider_ID"].value_counts().head(5).plot(kind="bar", color="green")
+plt.title("Top 5 Providers by Number of Claims")
+plt.xlabel("Provider ID")
+plt.ylabel("Number of Claims")
+plt.show()
+
+# -----------------------------
+# Save Processed Data
+# -----------------------------
+df.to_csv("processed_claims_data.csv", index=False)
+print("\nProcessed data saved as processed_claims_data.csv")
