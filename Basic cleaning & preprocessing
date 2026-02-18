@@ -1,31 +1,27 @@
-# Standardize column names
-df.columns = df.columns.str.strip().str.lower()
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 
-# Expected columns from the GitHub dataset:
-# claimid, providerid, patientid, dateofservice, billedamount, procedurecode,
-# diagnosiscode, allowedamount, paidamount, insurancetype, claimstatus,
-# reasoncode, followuprequired, arstatus, outcome
+# -----------------------------
+# Load Dataset from GitHub
+# -----------------------------
+file_path = "https://raw.githubusercontent.com/shivaprasad1808/Healthcare_claims_dataset/main/claims_data.xlsx"
+df = pd.read_excel(file_path)
 
-# Convert dates
-df["dateofservice"] = pd.to_datetime(df["dateofservice"], errors="coerce")
+# -----------------------------
+# Clean Column Names
+# -----------------------------
+# Remove spaces and replace with underscores
+df.columns = df.columns.str.strip().str.replace(" ", "_")
 
-# Numeric conversions
-num_cols = ["billedamount", "allowedamount", "paidamount", "procedurecode"]
-for col in num_cols:
-    df[col] = pd.to_numeric(df[col], errors="coerce")
+# -----------------------------
+# Initial Data Inspection
+# -----------------------------
+print("First 5 rows of dataset:")
+print(df.head())
 
-# Basic missing value check
-print(df.isna().sum())
+print("\nDataset Information:")
+print(df.info())
 
-# Simple missing handling
-# Drop rows with missing key numeric fields
-df = df.dropna(subset=["billedamount", "allowedamount", "paidamount"])
-
-# Fill missing categorical with "Unknown"
-cat_cols = ["insurancetype", "claimstatus", "reasoncode",
-            "followuprequired", "arstatus", "outcome", "diagnosiscode"]
-for col in cat_cols:
-    if col in df.columns:
-        df[col] = df[col].fillna("Unknown")
-
-print("After cleaning shape:", df.shape)
+print("\nColumn Names:")
+print(df.columns.tolist())
